@@ -1,21 +1,130 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+  <div class="container-fluid">
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home
+            <span class="sr-only">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Services</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Contact</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<!-- End Navigation -->
+<!-- Page Content -->
+<div class="container-fluid">
+  <h2>Option Decay Analysis</h2>
+  <div class="alert alert-secondary" role="alert">
+    <form class="form-inline" action="/action_page.php">
+      <label for="symbol">Symbol:</label>
+      <select class="form-control" id="symbol" (change)="onItemSelect($event.target.value)"  [(ngModel)]="selectedOption1" name="symbol">
+        <option *ngFor="let k of getSymbolData" [value]="k.SymbolName">
+          {{k.SymbolName}}
+        </option>
+      </select>
+      <label for="expiry">Expiry:</label>
+      <select class="form-control" id="expiry"  [(ngModel)]="selectedOption2" name ="expiry">
+        <option *ngFor="let k of getFilterExpiryData" [value]="k.ExpiryDates">
+          {{k.ExpiryDates}}
+        </option>
+      </select>
+      <button type="submit" class="btn btn-primary" (click)="getNSECALCData()">Submit</button>
+    </form>
 
-<router-outlet></router-outlet>
+  </div>
+  <div class="table table-bordered">
+    <table class="table table-sm table-striped">
+      <thead>
+        <tr class="bg-primary text-white" >
+          <th>Option Type</th>
+          <th>Strike</th>
+          <th>Open Interest</th>
+          <th>Premium Change Direct</th>
+          <th>Premium Change Reverse</th>
+          <th>Change OI 1</th>
+          <th>Change OI 2</th>
+          <th>Change OI 3</th>
+          <th>IV 1</th>
+          <th>IV 2</th>
+          <th>IV 3</th>
+          <th>TradedVolume 1</th>
+          <th>TradedVolume 2</th>
+          <th>TradedVolume OI 3</th>
+          <th>Probability</th>
+        </tr>
+
+      </thead>
+      <tbody>
+        <tr *ngFor="let i of getNSEData?.data ;let j= index;">
+          <td>{{i.maxltp}} OI {{ i.type}}</td>
+          <td>{{i.strikePrice}}</td>
+          <td>{{i.openInterest}}</td>
+          <td>{{i.decayAvg}}</td>
+          <td>{{i.decayRevSum}}</td>
+          <td>{{i.changeinOpenInterestmax1}}</td>
+          <td>{{i.changeinOpenInterestmax2}}</td>
+          <td>{{i.changeinOpenInterestmax3}}</td>
+          <td>{{i.impliedVolatilitymax1}}</td>
+          <td>{{i.impliedVolatilitymax2}}</td>
+          <td>{{i.impliedVolatilitymax3}}</td>
+          <td>{{i.totalTradedVolumemax1}}</td>
+          <td>{{i.totalTradedVolumemax2}}</td>
+          <td>{{i.totalTradedVolumemax3}}</td>
+          <td>{{i.winningProb}}%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div >
+    <table class="table table-bordered table-sm table-striped">
+      <thead>
+        <tr class = "bg-dark text-white">
+          <th>Option type</th>
+          <th>Average Change Direct</th>
+          <th>Average Change Reverse</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let m of getNSEData?.dataAvg ;let n= index;">
+          <td>{{m.type}}</td>
+          <td>{{m.decayAvg}}</td>
+          <td>{{m.decayRevSum}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div >
+
+    <table class="table table-bordered table-sm table-striped">
+      <thead>
+        <tr class = "bg-primary text-white">
+          <th>Current Market Price (Spot)</th>
+          <th>ATM CALL IV</th>
+          <th>ATM PUT IV</th>
+          <th>LAST UPDATED (DATA): H:M:S</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{getNSEData?.uvCurr}}</td>
+          <td>{{getNSEData?.atm_call_iv}}</td>
+          <td>{{getNSEData?.atm_put_iv}}</td>
+          <td>{{getNSEData?.maxDatetime}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div> 
+</div>
+<!-- /.container -->
