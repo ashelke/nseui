@@ -13,7 +13,7 @@ import {HttpClient} from '@angular/common/http';
 })
 export class AppComponent {
   title = 'nseui';
-  getNSEData : NSE[];
+  getNSEData : any;
   getSymbolData : NSESYMBOL[];
   getExpiryData  : NSEEXPIRY[];
   getFilterExpiryData  = [];
